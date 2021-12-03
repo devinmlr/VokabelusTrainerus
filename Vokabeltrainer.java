@@ -55,7 +55,7 @@ public class Vokabeltrainer
     }
     
     public void showHelp () {
-        System.out.println("Die Verwendung vom Vokabeltrainer: \n'h'    -    help \n'n'    -    Neue Vokabel hinzufügen \n'l'    -    Vokabeln lernen \n'a'    -    Vokabelliste ausgeben \n's'    -    Vokabel suchen  \n'm'    -    Menü aufrufen \n'q'    -    Beenden");
+        System.out.println("Die Verwendung vom Vokabeltrainer: \n'h'    -    help \n'n'    -    Neue Vokabel hinzufügen \n'e'    -    Vokabelliste editieren \n'l'    -    Vokabeln lernen \n'a'    -    Vokabelliste ausgeben \n's'    -    Vokabel suchen  \n'm'    -    Menü aufrufen \n'q'    -    Beenden");
         
         input();
     }
