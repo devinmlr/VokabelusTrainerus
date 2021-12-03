@@ -3,6 +3,7 @@ public class MyList{
     private ListNode first;
     private ListNode current;
     private ListNode last;
+    private String mode;
 
     class ListNode{
 
@@ -32,7 +33,8 @@ public class MyList{
 
     }
 
-    MyList(){
+    MyList(String mode){
+        this.mode = mode;
         first=null;
         last=null;
         current=null;
@@ -142,12 +144,97 @@ public class MyList{
     
     public MyList getCopy(){
         toFirst();
-        MyList copy=new MyList();
+        MyList copy=new MyList(mode);
         while (hasAccess()){
             copy.append(getContent());
             next();
         }
         return copy;
     }
-
+    
+    public int getLength () {
+        ListNode current = this.current;
+        int length = 0;
+        toFirst();
+        do {
+            length++;
+            if (getNext() != null) {
+                next();                
+            }
+        } while (getNext() != null);
+        this.current = current;
+        return length;
+    }
+    
+    public void printList () {
+        ListNode current = this.current;
+        toFirst();
+        next();
+        int counter = 1;
+        do {
+            if (counter == 1 && this.getContent() == null) {
+                System.out.println("Die Liste ist leider noch leer!");
+                break;
+            } else if (this.getContent() == null) {
+                break;
+            }
+            String[] voc = new String[2];
+            voc = (String[])getContent();
+            System.out.println(counter + ". " + voc[0] + " : " + voc[1]);
+            counter++;
+        } while (getNext() != null);
+        this.current = current;
+    }
+    
+    public void edit (int stelle, int i, String correct) {
+        String[] voc  = new String[2];
+        voc = getElement(stelle);
+        voc[i] = correct;
+        setContent(voc);
+    }
+    
+    public String[] getElement(int stelle) {
+        toFirst();
+        for (int i = 0; i<stelle; i++) {
+            next();
+        }
+        
+        String[] voc = new String[2];
+        
+        voc = (String[])getContent();
+        
+        return voc;
+    }
+        
+    public void search(String sText) {
+        ListNode current = this.current;
+        toFirst();
+        next();
+        Object result = new Object();
+        String[] resultText = new String[2];
+        int counter = 1;
+        
+        if (mode == "voc") {
+            do {
+                if (getContent() == null) {
+                    break;
+                }
+                if (((String[])getContent())[0] == sText || ((String[])getContent())[1] == sText) {
+                    result = getContent();
+                    break;
+                }else if (getNext() != null) {
+                    next();
+                }
+                counter++;
+            } while (getNext() != null);
+            if (getContent() != null) {
+                resultText = (String[])getContent();
+                System.out.println("Die Vokabel '" + resultText[0] + "' : '" + resultText[1] + "' steht an " + counter + ". Stelle.");
+            } else {
+                System.out.println("Die Vokabel existiert leider nicht in deiner Liste.");
+            }
+        }
+        
+        this.current = current;
+    }
 }
