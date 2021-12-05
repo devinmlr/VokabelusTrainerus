@@ -1,0 +1,2 @@
+Auto;car
+Tür;door

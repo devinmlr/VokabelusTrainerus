@@ -1,5 +1,10 @@
 import java.util.Scanner;
 import java.lang.Math;
+import java.io.BufferedWriter;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.FileReader;
 
 public class Vokabeltrainer
 {
@@ -38,7 +43,11 @@ public class Vokabeltrainer
             vList.printList();
             showMenu();
         }else if (e.equals("s")) {
-            searchVoc();
+            saveList();
+        }else if (e.equals("i")) {
+            importList();
+        }else if (e.equals("f")) {
+            findVoc();
         }else if (e.equals("q")) {
             System.out.println("");
         }
@@ -55,7 +64,7 @@ public class Vokabeltrainer
     }
     
     public void showHelp () {
-        System.out.println("Die Verwendung vom Vokabeltrainer: \n'h'    -    help \n'n'    -    Neue Vokabel hinzufügen \n'e'    -    Vokabelliste editieren \n'l'    -    Vokabeln lernen \n'a'    -    Vokabelliste ausgeben \n's'    -    Vokabel suchen  \n'm'    -    Menü aufrufen \n'q'    -    Beenden");
+        System.out.println("Die Verwendung vom Vokabeltrainer: \n'h'    -    help \n'n'    -    Neue Vokabel hinzufügen \n'e'    -    Vokabelliste editieren \n'l'    -    Vokabeln lernen \n'a'    -    Vokabelliste ausgeben \n'f'    -    Vokabel finden  \n'm'    -    Menü aufrufen \n'q'    -    Beenden");
         
         input();
     }
@@ -130,7 +139,7 @@ public class Vokabeltrainer
        return right;
     }
     
-    public void searchVoc () {
+    public void findVoc () {
         System.out.println("Welche Vokabel möchtest du finden? (beide sprachen akzeptiert!)");
         String e = s.nextLine();
         vList.search(e);
@@ -190,4 +199,71 @@ public class Vokabeltrainer
             editError(ex);
         }
     }
+    
+    public void saveList () {
+        String[] voc = new String[2];
+        vList.toFirst();
+        BufferedWriter bw = null;
+        try {
+            File file = new File("file.txt");
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+        
+            FileWriter fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+        } catch (Exception ex) {
+            System.out.println("Error " + ex);
+        }
+        
+        do {
+            vList.next();
+            voc = (String[])vList.getContent();
+            try {
+                bw.append(voc[0]+";"+voc[1]);
+                bw.newLine();
+                System.out.println("File written Successfully");
+            } catch (Exception ioe) {
+                System.out.println(ioe);
+            }
+        } while (vList.getNext() != null);
+        
+        try {
+            if(bw!=null) {
+                bw.close();
+            }
+        }catch (Exception ex) {
+            System.out.println("Error in closing the BufferedWriter"+ex);
+        }
+        
+    }
+    
+    public void importList () {
+        String[] voc = new String[2];
+        BufferedReader br = null;
+        StringBuilder content = new StringBuilder();
+
+        try {
+            FileReader file = new FileReader("file.txt");
+            br = new BufferedReader(file);
+        }catch (Exception ex) {
+            System.out.println("Error " + ex);
+        }
+
+        String line="";
+        try {
+            line = br.readLine();
+            while(line != null) {
+                voc = line.split(";");
+                System.out.println(voc[0]);
+                System.out.println(voc[1]);
+                //vList.append(voc);
+                line = br.readLine();
+            }
+        }catch (Exception ex) {
+            System.out.println("Error " + ex);
+        }
+        showMenu();
+    }
 }
+    
